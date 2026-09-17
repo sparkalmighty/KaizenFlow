@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-Kaizen Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1224; --navy-900:#0B1224; --blue-900:#0F2A6B; --blue-700:#1D4ED8;
+    --blue-600:#2563EB; --blue-400:#5B9BFF; --sky-50:#F3F7FF; --sky-100:#E7F0FF;
+    --slate-600:#5A6478; --slate-400:#8994A8; --white:#FFFFFF; --surface:#FFFFFF;
+    --header-bg:rgba(255,255,255,.9); --line:#E4E9F2;
+    --shadow:0 20px 45px -20px rgba(15,42,107,0.25);
+    --transition-theme: background .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  html[data-theme="dark"]{
+    --ink:#EDF1FA; --white:#0A1120; --surface:#121B33; --header-bg:rgba(10,17,32,.86);
+    --sky-50:#0E1830; --sky-100:#16223D; --slate-600:#A7B1C7; --slate-400:#78839C;
+    --line:#22304F; --shadow:0 20px 45px -20px rgba(0,0,0,0.6);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif; color:var(--ink); background:var(--white); -webkit-font-smoothing:antialiased; overflow-x:hidden; transition:var(--transition-theme);}
+  h1,h2,h3,.display{font-family:'Sora',sans-serif;}
+  a{text-decoration:none; color:inherit;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 32px;}
+  .eyebrow{font-size:13px; font-weight:600; color:var(--blue-700); letter-spacing:.02em;}
+  html[data-theme="dark"] .eyebrow{color:var(--blue-400);}
+  .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 26px; border-radius:100px; font-weight:600; font-size:15px; font-family:'Inter',sans-serif; border:none; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease; white-space:nowrap;}
+  .btn-primary{background:var(--blue-700); color:#fff; box-shadow:0 14px 28px -12px rgba(29,78,216,.55);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary svg{transition:transform .18s ease;}
+  .btn-primary:hover svg{transform:translate(3px,-3px);}
+  .btn-ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--blue-600); color:var(--blue-700);}
+  .btn-light{background:#fff; color:var(--blue-700);}
+  .theme-toggle{width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;}
+  .theme-toggle svg{color:var(--ink);}
+  .theme-toggle .sun{display:none;}
+  html[data-theme="dark"] .theme-toggle .moon{display:none;}
+  html[data-theme="dark"] .theme-toggle .sun{display:block;}
+  header{position:sticky; top:0; z-index:50; background:var(--header-bg); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1200px; margin:0 auto;}
+  .logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; font-family:'Sora',sans-serif;}
+  .logo-mark{width:38px; height:38px; border-radius:11px; background:linear-gradient(145deg, var(--blue-600), var(--blue-900)); display:flex; align-items:center; justify-content:center;}
+  .nav-links{display:flex; align-items:center; gap:34px; font-size:15px; font-weight:500; color:var(--slate-600);}
+  .nav-links a:hover{color:var(--blue-700);}
+  .nav-links .active{color:var(--ink); font-weight:600;}
+  .nav-cta{display:flex; align-items:center; gap:14px;}
+  .burger{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer;}
+  .burger span{width:24px; height:2px; background:var(--ink);}
+  .announce{background:var(--navy-900); color:#fff; padding:12px 32px;}
+  .announce-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:12px; font-size:14px; font-weight:500; text-align:center; flex-wrap:wrap;}
+  .announce-tag{background:var(--blue-600); color:#fff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:100px;}
+  .announce a{color:var(--blue-400); font-weight:600; border-bottom:1px solid rgba(91,155,255,.5);}
+  .hero{padding:88px 0 60px;}
+  .hero .wrap{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center;}
+  .hero h1{font-size:56px; line-height:1.06; font-weight:700; letter-spacing:-.015em; margin:22px 0;}
+  .hero p.lead{font-size:17px; color:var(--slate-600); max-width:460px; line-height:1.65; margin-bottom:32px;}
+  .hero-ctas{display:flex; gap:14px; margin-bottom:44px; flex-wrap:wrap;}
+  .hero-stats{display:flex; gap:36px; border-top:1px solid var(--line); padding-top:26px;}
+  .hero-stats div strong{display:block; font-family:'Sora',sans-serif; font-size:26px; font-weight:700;}
+  .hero-stats div span{font-size:13px; color:var(--slate-400);}
+  .hero-art{position:relative; aspect-ratio:1/1.04; border-radius:32px; background:linear-gradient(160deg,#173B8F 0%, #1D4ED8 45%, #3B7BFF 100%); overflow:hidden; box-shadow:var(--shadow);}
+  .hero-art::before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 80% 15%, rgba(255,255,255,.18), transparent 45%);}
+  .ring{position:absolute; border:1.5px solid rgba(255,255,255,.28); border-radius:50%;}
+  .ring.r1{width:280px; height:280px; top:50%; left:50%; transform:translate(-50%,-46%);}
+  .ring.r2{width:200px; height:200px; top:50%; left:50%; transform:translate(-50%,-46%);}
+  .ring.r3{width:120px; height:120px; top:50%; left:50%; transform:translate(-50%,-46%); border-color:rgba(255,255,255,.5);}
+  .hero-icon{position:absolute; top:50%; left:50%; transform:translate(-50%,-46%); width:86px; height:86px;}
+  .float-card{position:absolute; background:var(--surface); border-radius:16px; padding:14px 18px; box-shadow:0 18px 34px -14px rgba(15,42,107,.4); display:flex; align-items:center; gap:12px;}
+  .float-card .fc-icon{width:36px; height:36px; border-radius:10px; background:var(--sky-100); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .float-card strong{display:block; font-family:'Sora',sans-serif; font-size:16px; color:var(--ink);}
+  .float-card span{font-size:11.5px; color:var(--slate-400);}
+  .float-card.fc1{top:9%; left:8%;}
+  .float-card.fc2{bottom:11%; right:7%;}
+  .ticker-strip{background:var(--blue-900); overflow:hidden; padding:16px 0;}
+  .ticker-track{display:flex; gap:48px; width:max-content; animation:scroll 28s linear infinite;}
+  .ticker-track span{color:#fff; font-family:'Sora',sans-serif; font-weight:600; font-size:16px; display:flex; align-items:center; gap:48px; white-space:nowrap;}
+  .ticker-track span::after{content:"◆"; color:var(--blue-400); font-size:10px;}
+  @keyframes scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  .sec{padding:100px 0;}
+  .sec-head{max-width:640px; margin-bottom:56px;}
+  .sec-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+  .sec-head h2{font-size:38px; font-weight:700; letter-spacing:-.01em; line-height:1.2; margin-top:12px;}
+  .sec-head p{color:var(--slate-600); font-size:16px; margin-top:14px; line-height:1.65;}
+  .who .wrap{display:grid; grid-template-columns:.85fr 1.15fr; gap:64px; align-items:center;}
+  .who-visual{position:relative; border-radius:28px; background:var(--sky-100); aspect-ratio:.95/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .who-visual .blob{position:absolute; width:340px; height:340px; border-radius:44% 56% 62% 38%/48% 42% 58% 52%; background:linear-gradient(160deg,var(--blue-600),var(--blue-900));}
+  .who-visual svg{position:relative; z-index:2;}
+  .who-badge{position:absolute; bottom:22px; left:22px; background:var(--surface); border-radius:16px; padding:16px 20px; box-shadow:var(--shadow); z-index:3;}
+  .who-badge strong{font-family:'Sora',sans-serif; font-size:22px; color:var(--ink);}
+  .who-badge span{font-size:12px; color:var(--slate-400);}
+  .who-list{margin-top:28px; display:flex; flex-direction:column; gap:20px;}
+  .who-item{display:flex; gap:16px;}
+  .who-item .num{flex-shrink:0; width:38px; height:38px; border-radius:11px; background:var(--sky-100); color:var(--blue-700); font-family:'Sora',sans-serif; font-weight:700; display:flex; align-items:center; justify-content:center; font-size:14px;}
+  .who-item h4{font-size:16.5px; font-weight:600; margin-bottom:4px;}
+  .who-item p{font-size:14.5px; color:var(--slate-600); line-height:1.6;}
+  .why{background:var(--sky-50);}
+  .why-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
+  .why-card{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:30px 26px; transition:transform .2s ease, box-shadow .2s ease;}
+  .why-card:hover{transform:translateY(-4px); box-shadow:var(--shadow);}
+  .why-card .wc-icon{width:48px; height:48px; border-radius:13px; background:var(--blue-700); display:flex; align-items:center; justify-content:center; margin-bottom:20px;}
+  .why-card h3{font-size:17px; font-weight:600; margin-bottom:10px;}
+  .why-card p{font-size:14px; color:var(--slate-600); line-height:1.6;}
+  .coach-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
+  .coach-card{border:1px solid var(--line); border-radius:22px; overflow:hidden; background:var(--surface);}
+  .coach-photo{aspect-ratio:1/1.05; position:relative; display:flex; align-items:center; justify-content:center; background:linear-gradient(155deg,var(--cA),var(--cB));}
+  .coach-photo svg{width:56%; opacity:.95;}
+  .coach-tag{position:absolute; top:14px; left:14px; background:rgba(255,255,255,.92); color:var(--blue-700); font-size:11px; font-weight:700; padding:5px 11px; border-radius:100px;}
+  .coach-body{padding:20px 20px 24px;}
+  .coach-body h4{font-family:'Sora',sans-serif; font-size:17px; font-weight:700;}
+  .coach-body .role{color:var(--blue-700); font-size:13px; font-weight:600; margin:3px 0 10px;}
+  .coach-body p{font-size:13.5px; color:var(--slate-600); line-height:1.55;}
+  .location{background:var(--navy-900); color:#fff;}
+  .location .wrap{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;}
+  .location .eyebrow{color:var(--blue-400) !important;}
+  .location h2{color:#fff;}
+  .loc-rows{margin-top:30px; display:flex; flex-direction:column; gap:22px;}
+  .loc-row{display:flex; gap:16px;}
+  .loc-row .li-icon{width:42px; height:42px; border-radius:12px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .loc-row h4{font-size:15px; font-weight:600; margin-bottom:4px;}
+  .loc-row p{font-size:14px; color:#AEB8D0; line-height:1.6;}
+  .map-card{border-radius:26px; background:linear-gradient(150deg,#16296B,#1D4ED8 70%); aspect-ratio:1.05/1; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.12);}
+  .map-grid{position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); background-size:36px 36px;}
+  .pin{position:absolute; top:44%; left:50%; transform:translate(-50%,-50%); width:60px; height:60px; border-radius:50% 50% 50% 0; background:#fff; rotate:-45deg; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 30px -8px rgba(0,0,0,.5);}
+  .pin svg{rotate:45deg;}
+  .pulse{position:absolute; top:44%; left:50%; width:130px; height:130px; border:1.5px solid rgba(255,255,255,.5); border-radius:50%; transform:translate(-50%,-50%); animation:pulse 2.4s ease-out infinite;}
+  @keyframes pulse{0%{transform:translate(-50%,-50%) scale(.4); opacity:.9;} 100%{transform:translate(-50%,-50%) scale(1.6); opacity:0;}}
+  .map-tag{position:absolute; bottom:22px; left:22px; right:22px; background:rgba(255,255,255,.1); backdrop-filter:blur(6px); border-radius:14px; padding:14px 16px; font-size:13px; border:1px solid rgba(255,255,255,.15);}
+  .cta-band{background:linear-gradient(120deg,#173B8F,#1D4ED8 55%,#3B7BFF); border-radius:32px; margin:0 32px; padding:64px 60px; display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap; color:#fff;}
+  .cta-band h2{color:#fff; font-size:32px; max-width:460px;}
+  .cta-band p{color:#DCE6FF; margin-top:10px; font-size:15px;}
+  footer{padding:80px 0 30px;}
+  .foot-top{display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:40px; padding-bottom:50px; border-bottom:1px solid var(--line);}
+  .foot-brand p{color:var(--slate-600); font-size:14px; margin-top:14px; max-width:260px; line-height:1.6;}
+  .foot-col h5{font-size:14px; font-weight:600; margin-bottom:16px;}
+  .foot-col a{display:block; font-size:14px; color:var(--slate-600); margin-bottom:11px;}
+  .foot-col a:hover{color:var(--blue-700);}
+  .foot-social{display:flex; gap:10px; margin-top:20px;}
+  .foot-social a{width:36px; height:36px; border-radius:10px; background:var(--sky-100); display:flex; align-items:center; justify-content:center;}
+  .foot-bottom{display:flex; justify-content:space-between; padding-top:24px; font-size:13px; color:var(--slate-400); flex-wrap:wrap; gap:10px;}
+  @media(max-width:980px){
+    .nav-links{display:none;} .burger{display:flex;}
+    .hero .wrap, .who .wrap, .location .wrap{grid-template-columns:1fr;}
+    .why-grid, .coach-grid{grid-template-columns:repeat(2,1fr);}
+    .foot-top{grid-template-columns:1fr 1fr; row-gap:36px;}
+    .hero h1{font-size:40px;} .cta-band{margin:0 16px; padding:44px 30px;}
+  }
+  @media(max-width:560px){
+    .wrap{padding:0 20px;} .why-grid, .coach-grid, .foot-top{grid-template-columns:1fr;}
+    .hero-stats{flex-wrap:wrap; row-gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M7 12H17M9 8V16C9 16 9 8 9 8ZM15 8V16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      One-Kaizen Fitness
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="#who">About</a>
+      <a href="#coaches">Coaches</a>
+      <a href="#why">Programs</a>
+      <a href="#location">Location</a>
+    </div>
+    <div class="nav-cta">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V4.5M12 19.5V22M4.22 4.22L6 6M18 18L19.78 19.78M2 12H4.5M19.5 12H22M4.22 19.78L6 18M18 6L19.78 4.22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <a href="login.html" class="btn btn-ghost" style="padding:11px 20px; font-size:14px;">Log In</a>
+      <a href="register.html" class="btn btn-primary" style="padding:11px 22px; font-size:14px;">Join Now</a>
+      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<div class="announce">
+  <div class="announce-inner">
+    <span class="announce-tag">New</span>
+    <span>Founders' rate is live — 1-year membership at ₱990, student rate ₱690.</span>
+    <a href="#location">Visit the gym →</a>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Baliwag's home for real progress</span>
+      <h1>Small daily<br>reps build the<br>strongest results.</h1>
+      <p class="lead">One-Kaizen pairs a full training floor with coaches who track every session — so your one percent improvement actually compounds, week after week.</p>
+      <div class="hero-ctas">
+        <a href="register.html" class="btn btn-primary">Start your first session
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#why" class="btn btn-ghost">See membership plans</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>1,200+</strong><span>Active members</span></div>
+        <div><strong>9</strong><span>Certified coaches</span></div>
+        <div><strong>4.9/5</strong><span>Member rating</span></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+      <svg class="hero-icon" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M6 12H18M8 8V16M16 8V16" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <div class="float-card fc1">
+        <div class="fc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 9L16 13.5L17.5 20L12 16.5L6.5 20L8 13.5L3 9L9.5 8.5L12 2Z" stroke="#1D4ED8" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+        <div><strong>92%</strong><span>Goal completion</span></div>
+      </div>
+      <div class="float-card fc2">
+        <div class="fc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round"/><path d="M7 15L11 10L14 13L19 7" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><strong>Weekly</strong><span>Progress check-ins</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-strip">
+  <div class="ticker-track">
+    <span>
+      <span>Get adequate sleep</span><span>Include rest days</span><span>Focus on form</span><span>Stay consistent</span><span>Fuel before training</span>
+      <span>Get adequate sleep</span><span>Include rest days</span><span>Focus on form</span><span>Stay consistent</span><span>Fuel before training</span>
+    </span>
+  </div>
+</div>
+
+<section class="sec who" id="who">
+  <div class="wrap">
+    <div class="who-visual">
+      <div class="blob"></div>
+      <svg width="120" height="120" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M6 12H18M8 8V16M16 8V16" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <div class="who-badge"><strong>7 yrs</strong><span>Serving Baliwag</span></div>
+    </div>
+    <div>
+      <span class="eyebrow">Who we are</span>
+      <h2>A community-first gym, not a card-swipe membership.</h2>
+      <p style="color:var(--slate-600); margin-top:14px; line-height:1.7; max-width:480px;">One-Kaizen Fitness started as a single training room in Barangay Tangos and grew into a full facility because members kept coming back — for the coaching, not just the equipment.</p>
+      <div class="who-list">
+        <div class="who-item"><div class="num">01</div><div><h4>Coached, not just supervised</h4><p>Every plan is checked and adjusted by a real coach, on the floor.</p></div></div>
+        <div class="who-item"><div class="num">02</div><div><h4>Built for students and workers alike</h4><p>Student rates and flexible hours around school and shift schedules.</p></div></div>
+        <div class="who-item"><div class="num">03</div><div><h4>Everything tracked, nothing guessed</h4><p>Attendance, sessions, and progress are logged from day one.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec why" id="why">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow">Why choose us</span>
+      <h2>Everything you need to actually keep going</h2>
+      <p>Most people don't quit because a gym lacks equipment — they quit because nothing pushes them to return.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="wc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 4 15.5 4 9.5C4 6.46 6.46 4 9.5 4C10.99 4 12.36 4.68 13.25 5.79C14.14 4.68 15.51 4 17 4C20.04 4 22 6.46 22 9.5C22 15.5 12 21 12 21Z" stroke="white" stroke-width="1.7" stroke-linejoin="round"/></svg></div><h3>Certified coaching</h3><p>Every trainer is certified and reviews your form, not just your reps.</p></div>
+      <div class="why-card"><div class="wc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 6V12L16 14" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.7"/></svg></div><h3>Flexible schedules</h3><p>Per-session, weekly, or monthly passes that fit around class or shift hours.</p></div>
+      <div class="why-card"><div class="wc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="white" stroke-width="1.7" stroke-linecap="round"/><path d="M7 15L11 10L14 13L19 7" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Progress you can see</h3><p>Session logs and check-ins so you know what's actually working.</p></div>
+      <div class="why-card"><div class="wc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61C19.32 3.09 16.86 3.09 15.34 4.61L12 7.95L8.66 4.61C7.14 3.09 4.68 3.09 3.16 4.61C1.64 6.13 1.64 8.59 3.16 10.11L12 18.95L20.84 10.11C22.36 8.59 22.36 6.13 20.84 4.61Z" stroke="white" stroke-width="1.7" stroke-linejoin="round"/></svg></div><h3>A floor that has your back</h3><p>Free water, coffee, and Wi-Fi — small things that add up on a long day.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="coaches">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Meet the team</span>
+      <h2>Coaches who actually know your name</h2>
+      <p>Four specialties, one training philosophy: form first, consistency always.</p>
+    </div>
+    <div class="coach-grid">
+      <div class="coach-card"><div class="coach-photo" style="--cA:#1D4ED8; --cB:#0F2A6B;"><span class="coach-tag">Strength</span><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="1.4"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="coach-body"><h4>Coach Marco Reyes</h4><div class="role">Strength & Conditioning</div><p>8 years coaching powerlifting and general strength programs.</p></div></div>
+      <div class="coach-card"><div class="coach-photo" style="--cA:#3B7BFF; --cB:#173B8F;"><span class="coach-tag">Boxing</span><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="1.4"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="coach-body"><h4>Coach Anna Cruz</h4><div class="role">Boxing & Conditioning</div><p>Former amateur boxer, now running our boxing sessions.</p></div></div>
+      <div class="coach-card"><div class="coach-photo" style="--cA:#5B9BFF; --cB:#1D4ED8;"><span class="coach-tag">Weight loss</span><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="1.4"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="coach-body"><h4>Coach Paolo Santos</h4><div class="role">Weight Management</div><p>Specializes in beginner-friendly fat-loss programming.</p></div></div>
+      <div class="coach-card"><div class="coach-photo" style="--cA:#0F2A6B; --cB:#2563EB;"><span class="coach-tag">Mobility</span><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="white" stroke-width="1.4"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="coach-body"><h4>Coach Liza Torres</h4><div class="role">Mobility & Recovery</div><p>Keeps returning members injury-free with mobility work.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec location" id="location">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Where we're located</span>
+      <h2>Come see the floor before you commit.</h2>
+      <p style="color:#AEB8D0; margin-top:14px; max-width:420px; line-height:1.7;">Drop by for a walkthrough — no pressure, no sign-up required at the door.</p>
+      <div class="loc-rows">
+        <div class="loc-row"><div class="li-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 5 14.5 5 9.5C5 5.91 7.91 3 11.5 3H12.5C16.09 3 19 5.91 19 9.5C19 14.5 12 21 12 21Z" stroke="white" stroke-width="1.6"/><circle cx="12" cy="9.5" r="2.5" stroke="white" stroke-width="1.6"/></svg></div><div><h4>Address</h4><p>Barangay Tangos, City of Baliwag, Bulacan</p></div></div>
+        <div class="loc-row"><div class="li-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 6V12L16 14" stroke="white" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.6"/></svg></div><div><h4>Hours</h4><p>Mon–Sat, 6:00 AM – 10:00 PM</p></div></div>
+        <div class="loc-row"><div class="li-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 16.92V19.92C22 20.47 21.55 20.92 21 20.9C9.4 20.2 3.8 14.6 3.1 3C3.08 2.45 3.53 2 4.08 2H7.08C7.6 2 8.03 2.4 8.08 2.92C8.19 4.13 8.44 5.31 8.82 6.42C8.98 6.87 8.86 7.37 8.51 7.7L6.9 9.21C8.07 11.6 10.4 13.93 12.79 15.1L14.3 13.49C14.63 13.14 15.13 13.02 15.58 13.18C16.69 13.56 17.87 13.81 19.08 13.92C19.6 13.97 20 14.41 20 14.92" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Phone</h4><p>+63 917 000 0000</p></div></div>
+      </div>
+    </div>
+    <div class="map-card">
+      <div class="map-grid"></div><div class="pulse"></div>
+      <div class="pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" fill="#1D4ED8"/></svg></div>
+      <div class="map-tag"><strong style="display:block; font-family:'Sora',sans-serif; font-size:14px;">One-Kaizen Fitness</strong><span style="color:#AEB8D0;">Barangay Tangos, Baliwag, Bulacan</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0;">
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <h2>Your first session is on us.</h2>
+        <p>Walk in, meet a coach, and see the floor — free trial session, no commitment.</p>
+      </div>
+      <a href="register.html" class="btn btn-light">Book your free session
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="#1D4ED8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M7 12H17M9 8V16C9 16 9 8 9 8ZM15 8V16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+          One-Kaizen Fitness
+        </a>
+        <p>Continuous improvement, one session at a time. Barangay Tangos, City of Baliwag, Bulacan.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Programs</h5>
+        <a href="#why">Personal Training</a>
+        <a href="#why">Boxing</a>
+        <a href="#why">Open Gym Access</a>
+        <a href="#why">Student Plans</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#who">Who We Are</a>
+        <a href="#coaches">Coaches</a>
+        <a href="#why">Why Choose Us</a>
+        <a href="#location">Location</a>
+      </div>
+      <div class="foot-col">
+        <h5>Get in touch</h5>
+        <a href="login.html">Log In</a>
+        <a href="register.html">Create Account</a>
+        <a href="#location">Barangay Tangos, Baliwag, Bulacan</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 One-Kaizen Fitness. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    var html = document.documentElement;
+    var isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>

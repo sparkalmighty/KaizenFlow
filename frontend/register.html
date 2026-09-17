@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-Kaizen Fitness — Create Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1224; --blue-900:#0F2A6B; --blue-700:#1D4ED8; --blue-600:#2563EB; --blue-400:#5B9BFF;
+    --sky-50:#F3F7FF; --sky-100:#E7F0FF; --slate-600:#5A6478; --slate-400:#8994A8; --line:#E4E9F2;
+    --page-bg:#FFFFFF; --surface:#FFFFFF;
+    --transition-theme:background .25s ease, color .25s ease, border-color .25s ease;
+  }
+  html[data-theme="dark"]{
+    --ink:#EDF1FA; --sky-50:#0E1830; --sky-100:#16223D; --slate-600:#A7B1C7; --slate-400:#78839C;
+    --line:#22304F; --page-bg:#0A1120; --surface:#121B33;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; transition:var(--transition-theme);}
+  h1,h2,.display{font-family:'Sora',sans-serif;}
+  a{text-decoration:none; color:inherit;}
+  input,select{font-family:'Inter',sans-serif;}
+  .screen{display:grid; grid-template-columns:1fr 1fr; min-height:100vh;}
+  .slide-panel{position:relative; overflow:hidden; background:linear-gradient(160deg,#173B8F 0%, #1D4ED8 45%, #3B7BFF 100%); display:flex; flex-direction:column; justify-content:space-between; padding:44px 52px;}
+  .slide-brand{display:flex; align-items:center; gap:10px; color:#fff; font-family:'Sora',sans-serif; font-weight:700; font-size:18px; position:relative; z-index:3;}
+  .slide-brand .mark{width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,.16); display:flex; align-items:center; justify-content:center;}
+  .slides{position:absolute; inset:0;}
+  .slide{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .8s ease; padding:52px;}
+  .slide.active{opacity:1;}
+  .slide-art{position:relative; width:280px; height:280px; display:flex; align-items:center; justify-content:center;}
+  .slide-art .ring{position:absolute; border:1.5px solid rgba(255,255,255,.3); border-radius:50%;}
+  .slide-art .ring.r1{width:280px; height:280px;}
+  .slide-art .ring.r2{width:200px; height:200px;}
+  .slide-art .ring.r3{width:130px; height:130px; border-color:rgba(255,255,255,.55);}
+  .slide-copy{position:absolute; left:52px; right:52px; bottom:118px; z-index:3; color:#fff;}
+  .slide-copy h2{font-size:26px; font-weight:700; line-height:1.3; margin-bottom:10px; max-width:400px;}
+  .slide-copy p{font-size:14.5px; color:#D6E2FF; max-width:380px; line-height:1.6;}
+  .dots{display:flex; gap:8px; position:relative; z-index:3;}
+  .dot{width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer;}
+  .dot.active{width:26px; border-radius:100px; background:#fff;}
+  .float-chip{position:absolute; background:var(--surface); border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:10px; box-shadow:0 18px 34px -14px rgba(0,0,0,.4); z-index:3;}
+  .float-chip .fc-icon{width:32px; height:32px; border-radius:9px; background:var(--sky-100); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .float-chip strong{display:block; font-family:'Sora',sans-serif; font-size:14px; color:var(--ink);}
+  .float-chip span{font-size:10.5px; color:var(--slate-400);}
+  .form-panel{display:flex; align-items:center; justify-content:center; padding:40px; background:var(--page-bg); position:relative; overflow-y:auto;}
+  .theme-toggle{position:absolute; top:28px; right:32px; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5;}
+  .theme-toggle svg{color:var(--ink);}
+  .theme-toggle .sun{display:none;}
+  html[data-theme="dark"] .theme-toggle .moon{display:none;}
+  html[data-theme="dark"] .theme-toggle .sun{display:block;}
+  .form-box{width:100%; max-width:420px; padding:24px 0;}
+  .form-box .mobile-logo{display:none; align-items:center; gap:10px; font-family:'Sora',sans-serif; font-weight:700; font-size:17px; margin-bottom:32px;}
+  .form-box .mobile-logo .mark{width:34px; height:34px; border-radius:10px; background:linear-gradient(145deg,var(--blue-600),var(--blue-900)); display:flex; align-items:center; justify-content:center;}
+  .form-box h1{font-size:27px; font-weight:700; margin-bottom:8px;}
+  .form-box .sub{color:var(--slate-600); font-size:14.5px; margin-bottom:28px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:13px; font-weight:600; margin-bottom:7px;}
+  .input-wrap{display:flex; align-items:center; gap:10px; border:1.5px solid var(--line); border-radius:11px; padding:12px 14px; background:var(--surface);}
+  .input-wrap:focus-within{border-color:var(--blue-600);}
+  .input-wrap input,.input-wrap select{border:none; outline:none; flex:1; font-size:14px; color:var(--ink); background:transparent; width:100%;}
+  .input-wrap svg{flex-shrink:0; color:var(--slate-400);}
+  .hint{font-size:11.5px; color:var(--slate-400); margin-top:6px;}
+  .terms{display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--slate-600); margin:6px 0 24px; line-height:1.5;}
+  .terms input{accent-color:var(--blue-700); width:15px; height:15px; margin-top:2px; flex-shrink:0;}
+  .terms a{color:var(--blue-700); font-weight:600;}
+  .btn-primary{width:100%; background:var(--blue-700); color:#fff; border:none; padding:14px 0; border-radius:11px; font-weight:600; font-size:15px; cursor:pointer; box-shadow:0 14px 28px -14px rgba(29,78,216,.6);}
+  .login-line{text-align:center; font-size:13.5px; color:var(--slate-600); margin-top:26px;}
+  .login-line a{color:var(--blue-700); font-weight:700;}
+  @media(max-width:900px){
+    .screen{grid-template-columns:1fr;}
+    .slide-panel{display:none;}
+    .form-box .mobile-logo{display:flex;}
+    .field-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="slide-panel">
+    <a href="index.html" class="slide-brand">
+      <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M7 12H17M9 8V16M15 8V16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+      One-Kaizen Fitness
+    </a>
+    <div class="slides">
+      <div class="slide active" data-slide="0">
+        <div class="slide-art">
+          <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+          <svg width="70" height="70" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M6 12H18M8 8V16M16 8V16" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="float-chip" style="top:24%; left:14%;">
+          <div class="fc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 9L16 13.5L17.5 20L12 16.5L6.5 20L8 13.5L3 9L9.5 8.5L12 2Z" stroke="#1D4ED8" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          <div><strong>Free trial</strong><span>Your first session</span></div>
+        </div>
+      </div>
+      <div class="slide" data-slide="1">
+        <div class="slide-art">
+          <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+          <svg width="70" height="70" viewBox="0 0 24 24" fill="none"><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="white" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="8" r="4" stroke="white" stroke-width="1.5"/></svg>
+        </div>
+        <div class="float-chip" style="bottom:26%; right:12%;">
+          <div class="fc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 8V13L15 15" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#1D4ED8" stroke-width="1.8"/></svg></div>
+          <div><strong>9</strong><span>Certified coaches</span></div>
+        </div>
+      </div>
+      <div class="slide" data-slide="2">
+        <div class="slide-art">
+          <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+          <svg width="70" height="70" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61C19.32 3.09 16.86 3.09 15.34 4.61L12 7.95L8.66 4.61C7.14 3.09 4.68 3.09 3.16 4.61C1.64 6.13 1.64 8.59 3.16 10.11L12 18.95L20.84 10.11C22.36 8.59 22.36 6.13 20.84 4.61Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="float-chip" style="top:22%; right:12%;">
+          <div class="fc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round"/><path d="M7 15L11 10L14 13L19 7" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><strong>1,200+</strong><span>Active members</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="slide-copy" id="slideCopy0">
+        <h2>Your first session is on us.</h2>
+        <p>Create an account and walk in for a free trial — no commitment, no pressure.</p>
+      </div>
+      <div class="dots">
+        <div class="dot active" data-dot="0" onclick="goToSlide(0)"></div>
+        <div class="dot" data-dot="1" onclick="goToSlide(1)"></div>
+        <div class="dot" data-dot="2" onclick="goToSlide(2)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V4.5M12 19.5V22M4.22 4.22L6 6M18 18L19.78 19.78M2 12H4.5M19.5 12H22M4.22 19.78L6 18M18 6L19.78 4.22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="form-box">
+      <a href="index.html" class="mobile-logo">
+        <div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 10V14M2 8V16M20 8V16M22 10V14M7 12H17M9 8V16M15 8V16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+        One-Kaizen Fitness
+      </a>
+      <h1>Create your account</h1>
+      <p class="sub">Sign up to book sessions, track attendance, and manage your membership.</p>
+      <form onsubmit="return false;">
+        <div class="field-row">
+          <div class="field">
+            <label>First name</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="text" placeholder="Juan">
+            </div>
+          </div>
+          <div class="field">
+            <label>Last name</label>
+            <div class="input-wrap"><input type="text" placeholder="Dela Cruz"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Email address</label>
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M2 6L12 13L22 6" stroke="currentColor" stroke-width="1.6"/></svg>
+            <input type="email" placeholder="juan.delacruz@email.com">
+          </div>
+        </div>
+        <div class="field">
+          <label>Mobile number</label>
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 16.92V19.92C22 20.47 21.55 20.92 21 20.9C9.4 20.2 3.8 14.6 3.1 3C3.08 2.45 3.53 2 4.08 2H7.08C7.6 2 8.03 2.4 8.08 2.92C8.19 4.13 8.44 5.31 8.82 6.42C8.98 6.87 8.86 7.37 8.51 7.7L6.9 9.21C8.07 11.6 10.4 13.93 12.79 15.1L14.3 13.49C14.63 13.14 15.13 13.02 15.58 13.18C16.69 13.56 17.87 13.81 19.08 13.92C19.6 13.97 20 14.41 20 14.92" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="tel" placeholder="+63 9XX XXX XXXX">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Birthdate</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9H21" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="date">
+            </div>
+          </div>
+          <div class="field">
+            <label>Sex</label>
+            <div class="input-wrap">
+              <select>
+                <option value="" disabled selected>Select</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Password</label>
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V10" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="password" placeholder="••••••••">
+            </div>
+          </div>
+          <div class="field">
+            <label>Confirm password</label>
+            <div class="input-wrap"><input type="password" placeholder="••••••••"></div>
+          </div>
+        </div>
+        <p class="hint" style="margin-top:-8px; margin-bottom:18px;">At least 8 characters, with a number and a letter.</p>
+        <label class="terms">
+          <input type="checkbox">
+          <span>I agree to One-Kaizen Fitness's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</span>
+        </label>
+        <button class="btn-primary" type="submit">Create Account</button>
+      </form>
+      <p class="login-line">Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  var slideData = [
+    { h:"Your first session is on us.", p:"Create an account and walk in for a free trial — no commitment, no pressure." },
+    { h:"Coaches who actually know your name.", p:"Every plan is checked and adjusted by a real coach, on the floor." },
+    { h:"Flexible plans for students and workers alike.", p:"Per-session, weekly, or monthly passes that fit around your schedule." }
+  ];
+  var current = 0;
+  var slideCopyEl = document.getElementById('slideCopy0');
+  function render(i){
+    document.querySelectorAll('.slide').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelector('.slide[data-slide="'+i+'"]').classList.add('active');
+    document.querySelectorAll('.dot').forEach(function(d){ d.classList.remove('active'); });
+    document.querySelector('.dot[data-dot="'+i+'"]').classList.add('active');
+    slideCopyEl.querySelector('h2').textContent = slideData[i].h;
+    slideCopyEl.querySelector('p').textContent = slideData[i].p;
+  }
+  function goToSlide(i){ current = i; render(current); }
+  setInterval(function(){ current = (current + 1) % slideData.length; render(current); }, 4500);
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    var html = document.documentElement;
+    var isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
