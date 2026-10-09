@@ -21,6 +21,8 @@ class Config:
     DEBUG = os.getenv("FLASK_DEBUG", "1") == "1"
     HOST = os.getenv("HOST", "127.0.0.1")
     PORT = int(os.getenv("PORT", "5000"))
+    ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
     # Prefer PostgreSQL in production, e.g.:
     # postgresql+psycopg://user:pass@host:5432/kaizenflow
