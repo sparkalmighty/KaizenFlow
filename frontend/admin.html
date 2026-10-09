@@ -24,10 +24,30 @@
     --page:#F5F8FE;
     --shadow:0 16px 34px -18px rgba(15,42,107,.22);
   }
+  html[data-theme="dark"]{
+    --ink:#EDF1FA;
+    --surface:#121B33;
+    --page:#0A1120;
+    --sky-50:#0E1830;
+    --sky-100:#1A2747;
+    --slate-600:#A7B1C7;
+    --slate-400:#78839C;
+    --line:#22304F;
+    --shadow:0 16px 34px -18px rgba(0,0,0,.6);
+  }
+  html[data-theme="dark"] .tag.paid{background:rgba(34,197,94,.16); color:#4ADE80;}
+  html[data-theme="dark"] .tag.pending{background:rgba(245,158,11,.16); color:#FBBF24;}
+  html[data-theme="dark"] .kpi-trend.up{background:rgba(34,197,94,.16); color:#4ADE80;}
+  html[data-theme="dark"] .kpi-trend.down{background:rgba(239,68,68,.16); color:#F87171;}
+  html[data-theme="dark"] .panel-head a,
+  html[data-theme="dark"] .tag.member,
+  html[data-theme="dark"] .list-avatar{color:var(--blue-400);}
+  html[data-theme="dark"] .kpi-icon svg *{stroke:#5B9BFF;}
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
     font-family:'Inter',sans-serif; background:var(--page); color:var(--ink);
     -webkit-font-smoothing:antialiased;
+    transition:background .25s ease, color .25s ease;
   }
   h1,h2,h3,h4,.display{font-family:'Sora',sans-serif;}
   a{text-decoration:none; color:inherit;}
@@ -39,7 +59,9 @@
   .sidebar{
     background:var(--navy-900); color:#fff; padding:24px 18px;
     display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+    overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;
   }
+  .sidebar::-webkit-scrollbar{display:none;}
   #sidebar-root{display:block;}
   .side-logo{display:flex; align-items:center; gap:10px; padding:6px 10px 26px; font-family:'Sora',sans-serif; font-weight:700; font-size:16.5px;}
   .side-logo .mark{
@@ -84,6 +106,7 @@
     display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line);
     border-radius:11px; padding:10px 16px; width:320px; color:var(--slate-400); font-size:13.5px;
   }
+  .search, .panel, .kpi-card, .icon-btn{transition:background .25s ease, color .25s ease, border-color .25s ease;}
   .top-actions{display:flex; align-items:center; gap:14px;}
   .icon-btn{
     width:40px; height:40px; border-radius:11px; background:var(--surface); border:1px solid var(--line);
@@ -93,6 +116,35 @@
   .top-profile{display:flex; align-items:center; gap:10px; cursor:pointer;}
   .top-profile strong{font-size:13.5px; display:block;}
   .top-profile span{font-size:11.5px; color:var(--slate-400);}
+  .icon-btn .dot{border-color:var(--surface);}
+  .icon-btn svg{color:var(--ink);}
+  .theme-btn .sun{display:none;}
+  html[data-theme="dark"] .theme-btn .moon{display:none;}
+  html[data-theme="dark"] .theme-btn .sun{display:block;}
+  .profile-wrap{position:relative;}
+  .top-profile{padding:4px 8px 4px 4px; border-radius:12px; user-select:none;}
+  .top-profile:hover, .top-profile.open{background:var(--sky-100);}
+  .top-profile .chev{color:var(--slate-400); transition:transform .2s ease;}
+  .top-profile.open .chev{transform:rotate(180deg);}
+  .menu{
+    position:absolute; top:calc(100% + 10px); right:0; width:220px; z-index:60;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:8px;
+    box-shadow:0 24px 48px -16px rgba(11,18,36,.35);
+    opacity:0; transform:translateY(-6px); pointer-events:none; transition:opacity .15s ease, transform .15s ease;
+  }
+  .menu.open{opacity:1; transform:translateY(0); pointer-events:auto;}
+  .menu-head{padding:10px 12px 12px; border-bottom:1px solid var(--line); margin-bottom:6px;}
+  .menu-head strong{display:block; font-size:13.5px;}
+  .menu-head span{font-size:11.5px; color:var(--slate-400);}
+  .menu-item{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:9px; font-size:13.5px; font-weight:500; color:var(--ink); cursor:pointer;}
+  .menu-item:hover{background:var(--sky-100);}
+  .menu-item svg{color:var(--slate-400); flex-shrink:0;}
+  .menu-item.danger{color:#DC2626;}
+  html[data-theme="dark"] .menu-item.danger{color:#F87171;}
+  .menu-sep{height:1px; background:var(--line); margin:6px 0;}
+
+  html, body{scrollbar-width:none; -ms-overflow-style:none;}
+  html::-webkit-scrollbar, body::-webkit-scrollbar{display:none;}
 
   .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:22px;}
   .kpi-card{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:20px 22px;}
@@ -163,9 +215,9 @@
 
   @media(max-width:1100px){
     .app{grid-template-columns:1fr;}
-    .sidebar{position:relative; height:auto; flex-direction:row; align-items:center; flex-wrap:wrap; gap:10px;}
-    .nav-group{display:none;}
-    .side-foot{margin-top:0; margin-left:auto; border-top:none;}
+    .sidebar{position:relative; top:auto; height:40vh; min-height:220px; max-height:360px; flex-direction:column; align-items:stretch; flex-wrap:nowrap; gap:0;}
+    .nav-group{display:block;}
+    .side-foot{margin-top:auto; margin-left:0;}
     .kpi-row{grid-template-columns:repeat(2,1fr);}
     .grid-2{grid-template-columns:1fr;}
     .search{width:200px;}
@@ -192,11 +244,22 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
           <span class="dot"></span>
         </div>
-        <div class="top-profile">
-          <div class="avatar">BM</div>
-          <div>
-            <strong>Brother Migs</strong>
-            <span>Owner</span>
+        <button class="icon-btn theme-btn" id="themeToggle" data-theme-toggle type="button" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 2V4.5M12 19.5V22M4.22 4.22L6 6M18 18L19.78 19.78M2 12H4.5M19.5 12H22M4.22 19.78L6 18M18 6L19.78 4.22" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <div class="profile-wrap">
+          <div class="top-profile" id="profileBtn" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
+            <div class="avatar" style="color:#fff;">BM</div>
+            <div><strong>Brother Migs</strong><span>Owner</span></div>
+            <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="menu" id="profileMenu">
+            <div class="menu-head"><strong>Brother Migs</strong><span>Owner / Admin</span></div>
+            <a class="menu-item" href="/logout">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H9M16 17L21 12M21 12L16 7M21 12H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Log out
+            </a>
           </div>
         </div>
       </div>
@@ -393,6 +456,30 @@
 </div>
 
 <script>
+  var profileButton = document.getElementById('profileBtn');
+  var profileMenu = document.getElementById('profileMenu');
+  function setProfileMenu(open){
+    profileMenu.classList.toggle('open', open);
+    profileButton.classList.toggle('open', open);
+    profileButton.setAttribute('aria-expanded', String(open));
+  }
+  profileButton.addEventListener('click', function(event){
+    event.stopPropagation();
+    setProfileMenu(!profileMenu.classList.contains('open'));
+  });
+  profileButton.addEventListener('keydown', function(event){
+    if(event.key === 'Enter' || event.key === ' '){
+      event.preventDefault();
+      setProfileMenu(!profileMenu.classList.contains('open'));
+    }
+  });
+  document.addEventListener('click', function(event){
+    if(!profileMenu.contains(event.target)) setProfileMenu(false);
+  });
+  document.addEventListener('keydown', function(event){
+    if(event.key === 'Escape') setProfileMenu(false);
+  });
+
   function toggleDoor(){
     var btn = document.getElementById('doorBtn');
     var label = document.getElementById('doorBtnLabel');
@@ -414,6 +501,7 @@
 </script>
 
 <script src="/components/sidebar.js"></script>
+<script src="/components/theme.js"></script>
 
 </body>
 </html>

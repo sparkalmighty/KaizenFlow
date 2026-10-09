@@ -34,7 +34,8 @@
     .app{display:grid; grid-template-columns:264px 1fr; min-height:100vh;}
 
     #sidebar-root .sidebar,
-    .sidebar{background:var(--navy-900); color:#fff; padding:24px 18px; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto;}
+    .sidebar{background:var(--navy-900); color:#fff; padding:24px 18px; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;}
+    .sidebar::-webkit-scrollbar{display:none;}
     .side-logo{display:flex; align-items:center; gap:10px; padding:6px 10px 26px; font-family:'Sora',sans-serif; font-weight:700; font-size:16.5px;}
     .side-logo .mark{width:34px; height:34px; border-radius:10px; flex-shrink:0; background:linear-gradient(145deg,var(--blue-600),#173B8F); display:flex; align-items:center; justify-content:center;}
     .side-logo .role{display:block; font-size:11px; font-weight:500; color:var(--blue-400); margin-top:1px;}
@@ -117,10 +118,15 @@
     .pay-row small{display:block; color:var(--slate-400); font-size:11.5px;}
     .dr-actions{padding:20px 28px; display:flex; gap:10px;}
     .dr-actions .btn{flex:1; justify-content:center;}
+    html, body{scrollbar-width:none; -ms-overflow-style:none;}
+    html::-webkit-scrollbar, body::-webkit-scrollbar, .drawer::-webkit-scrollbar{display:none;}
+    .drawer{scrollbar-width:none; -ms-overflow-style:none;}
 
     @media(max-width:1100px){
       .app{grid-template-columns:1fr;}
-      .sidebar{display:none;}
+      .sidebar{position:relative; top:auto; height:40vh; min-height:220px; max-height:360px; flex-direction:column; align-items:stretch; flex-wrap:nowrap; gap:0;}
+      .nav-group{display:block;}
+      .side-foot{margin-top:auto; margin-left:0;}
       .summary{grid-template-columns:repeat(2,1fr);}
     }
   </style>
@@ -136,10 +142,6 @@
           <div class="sub">View, filter, and manage all gym clients</div>
         </div>
         <div class="actions">
-          <button class="theme-btn" id="themeToggle" title="Toggle dark mode" type="button" aria-label="Toggle dark mode">
-            <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.7"/><path d="M12 2V4.5M12 19.5V22M4.22 4.22L6 6M18 18L19.78 19.78M2 12H4.5M19.5 12H22M4.22 19.78L6 18M18 6L19.78 4.22" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-          </button>
           <button class="btn btn-ghost" type="button">Export CSV</button>
           <button class="btn btn-primary" type="button">+ Add Member</button>
         </div>
@@ -392,12 +394,8 @@
       document.querySelectorAll('tbody tr').forEach(function(r){ r.classList.remove('selected'); });
     }
 
-    document.getElementById('themeToggle').addEventListener('click', function(){
-      var root = document.documentElement;
-      root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    });
-
     render();
   </script>
+  <script src="/components/theme.js"></script>
 </body>
 </html>
