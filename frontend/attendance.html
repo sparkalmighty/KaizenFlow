@@ -15,6 +15,7 @@
     html[data-theme="dark"]{
       --ink:#EDF1FA; --surface:#121B33; --page:#0A1120; --sky-50:#0E1830; --sky-100:#1A2747;
       --slate-600:#A7B1C7; --slate-400:#78839C; --line:#22304F;
+      color-scheme:dark;
     }
     *{box-sizing:border-box; margin:0; padding:0;}
     html,body{scrollbar-width:none; -ms-overflow-style:none;}
@@ -45,7 +46,15 @@
     .topbar h1{font-size:23px; font-weight:700;}
     .topbar .sub{font-size:13px; color:var(--slate-400); margin-top:2px;}
     .top-right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-    .date-pill{display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:10px 14px; font-size:13px; font-weight:500;}
+    .date-nav{display:flex; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:11px; overflow:hidden;}
+    .date-nav button.arrow{border:none; background:transparent; color:var(--ink); width:38px; height:42px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+    .date-nav button.arrow:hover:not(:disabled){background:var(--sky-100);}
+    .date-nav button.arrow:disabled{opacity:.3; cursor:not-allowed;}
+    .date-nav input[type=date]{border:none; border-left:1px solid var(--line); border-right:1px solid var(--line); outline:none; background:transparent; color:var(--ink); font-size:13.5px; font-weight:600; padding:0 12px; height:42px; cursor:pointer;}
+    .today-btn{border:1px solid var(--blue-700); background:transparent; color:var(--blue-700); font-weight:600; font-size:13px; padding:0 14px; height:42px; border-radius:11px; cursor:pointer;}
+    .today-btn:hover:not(:disabled){background:var(--blue-700); color:#fff;}
+    .today-btn:disabled{opacity:.35; cursor:not-allowed;}
+    html[data-theme="dark"] .today-btn{color:var(--blue-400); border-color:var(--blue-400);}
     .btn{display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:11px; font-weight:600; font-size:14px; border:none; cursor:pointer;}
     .btn-primary{background:var(--blue-700); color:#fff; box-shadow:0 12px 24px -12px rgba(29,78,216,.55);}
     .btn-ghost{background:var(--surface); color:var(--ink); border:1px solid var(--line);}
@@ -57,11 +66,13 @@
     .kpi span{font-size:12.5px; color:var(--slate-400);}
     .kpi.warn .kpi-icon{background:#FFF6E5; color:var(--amber);}
     html[data-theme="dark"] .kpi.warn .kpi-icon{background:rgba(245,158,11,.16); color:#FBBF24;}
-    .grid{display:grid; grid-template-columns:1.55fr 1fr; gap:20px; align-items:start;}
-    .panel{background:var(--surface); border:1px solid var(--line); border-radius:18px; margin-bottom:20px; transition:background .25s ease,border-color .25s ease;}
+    .grid{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:20px; align-items:start;}
+    .grid>div{min-width:0;}
+    .panel{background:var(--surface); border:1px solid var(--line); border-radius:18px; margin-bottom:20px; transition:background .25s ease,border-color .25s ease; min-width:0;}
     .panel-pad{padding:22px 24px;}
     .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; gap:10px; flex-wrap:wrap;}
     .panel-head h3{font-size:15.5px; font-weight:700;}
+    .panel-head .hint{font-size:12px; color:var(--slate-400); margin-top:3px; font-family:'Inter',sans-serif; font-weight:400;}
     .live{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; color:var(--green);}
     .live i{width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 1.6s infinite;}
     @keyframes blink{50%{opacity:.25;}}
@@ -84,6 +95,10 @@
     .toast{margin-top:12px; background:rgba(255,255,255,.14); border-radius:10px; padding:10px 14px; font-size:13px; display:none; align-items:center; justify-content:space-between; gap:10px;}
     .toast.show{display:flex;}
     .toast button{background:#fff; color:var(--blue-700); border:none; font-weight:700; font-size:12px; padding:6px 12px; border-radius:100px; cursor:pointer;}
+    .past-note{display:none; align-items:center; justify-content:space-between; gap:14px; background:rgba(255,255,255,.12); border-radius:12px; padding:14px 16px; font-size:13.5px;}
+    .past-note button{background:#fff; color:var(--blue-700); border:none; font-weight:700; font-size:12.5px; padding:8px 14px; border-radius:100px; cursor:pointer; white-space:nowrap;}
+    .checkin.past .ci-live{display:none;}
+    .checkin.past .past-note{display:flex;}
     .m-avatar{width:36px; height:36px; border-radius:50%; background:var(--sky-100); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-weight:700; font-size:12px; flex-shrink:0;}
     html[data-theme="dark"] .panel .m-avatar{color:var(--blue-400);}
     .tag{font-size:11px; font-weight:700; padding:4px 10px; border-radius:100px; white-space:nowrap; display:inline-block;}
@@ -102,10 +117,19 @@
     .tab{padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; color:var(--slate-600); cursor:pointer; border:0; background:transparent;}
     .tab.active{background:var(--surface); color:var(--blue-700); box-shadow:0 6px 14px -8px rgba(15,42,107,.25);}
     html[data-theme="dark"] .tab.active{color:var(--blue-400);}
+    .filters{display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; padding-bottom:16px; margin-bottom:6px; border-bottom:1px solid var(--line);}
+    .f-search{display:flex; align-items:center; gap:9px; border:1.5px solid var(--line); border-radius:10px; padding:9px 13px; flex:1; min-width:180px; color:var(--slate-400);}
+    .f-search input{border:none; outline:none; flex:1; font-size:13.5px; color:var(--ink); background:transparent; width:100%;}
+    .f-group label{display:block; font-size:10.5px; font-weight:600; color:var(--slate-400); text-transform:uppercase; letter-spacing:.04em; margin-bottom:5px;}
+    .f-group select{border:1.5px solid var(--line); border-radius:10px; padding:9px 11px; font-size:13px; color:var(--ink); background:var(--surface); outline:none; min-width:130px; cursor:pointer;}
+    .f-group select:focus,.f-search:focus-within{border-color:var(--blue-600);}
+    .f-meta{display:flex; align-items:center; gap:12px; margin-left:auto; font-size:12.5px; color:var(--slate-400); padding-bottom:10px;}
+    .clear{border:0; padding:0; background:transparent; color:var(--blue-700); font:inherit; font-weight:600; cursor:pointer;}
+    html[data-theme="dark"] .clear{color:var(--blue-400);}
     .table-wrap{overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;}
     .table-wrap::-webkit-scrollbar{display:none;}
-    table{width:100%; border-collapse:collapse; min-width:560px;}
-    th{text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--slate-400); font-weight:600; padding:0 8px 10px 0;}
+    table{width:100%; border-collapse:collapse; min-width:700px;}
+    th{text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--slate-400); font-weight:600; padding:12px 12px 10px 0;}
     td{padding:12px 8px 12px 0; border-top:1px solid var(--line); font-size:13.5px; vertical-align:middle;}
     .cell{display:flex; align-items:center; gap:11px;}
     .cell strong{display:block; font-size:13.5px;}
@@ -113,6 +137,7 @@
     .muted{color:var(--slate-400); font-size:12.5px;}
     .link-btn{border:1px solid var(--line); background:var(--surface); color:var(--ink); font-size:12px; font-weight:600; padding:6px 12px; border-radius:8px; cursor:pointer;}
     .link-btn:hover{border-color:var(--blue-600); color:var(--blue-700);}
+    .empty{padding:44px 10px; text-align:center; color:var(--slate-400); font-size:13.5px; display:none;}
     .ig-item{display:flex; align-items:center; gap:12px; padding:11px 0; border-top:1px solid var(--line);}
     .ig-item:first-child{border-top:none; padding-top:0;}
     .ig-item h5{font-size:13.5px; font-weight:600;}
@@ -143,38 +168,45 @@
       <div class="topbar">
         <div>
           <h1>Attendance</h1>
-          <div class="sub">Check members in and out, and track who's on the floor</div>
+          <div class="sub" id="pageSub">Check members in and out, and track who's on the floor</div>
         </div>
         <div class="top-right">
-          <div class="date-pill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span id="todayLabel"></span></div>
-          <button class="btn btn-ghost" id="exportButton" type="button">Export</button>
+          <div class="date-nav">
+            <button class="arrow" id="prevDay" type="button" title="Previous day" aria-label="Previous day"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <input type="date" id="datePick" aria-label="Attendance date">
+            <button class="arrow" id="nextDay" type="button" title="Next day" aria-label="Next day"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <button class="today-btn" id="todayBtn" type="button">Today</button>
+          <button class="btn btn-ghost" id="exportButton" type="button">Export CSV</button>
         </div>
       </div>
       <div class="kpi-row">
-        <div class="kpi"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div><div><strong id="kIn">0</strong><span>In the gym now</span></div></div>
-        <div class="kpi"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 9.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.7"/></svg></div><div><strong id="kTotal">0</strong><span>Check-ins today</span></div></div>
-        <div class="kpi"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 3V21H21" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M7 15L11 10L14 13L19 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><strong>5–6 PM</strong><span>Usual peak hour</span></div></div>
+        <div class="kpi"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 9.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.7"/></svg></div><div><strong id="kTotal">0</strong><span>Checked in</span></div></div>
+        <div class="kpi"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H9M16 17L21 12M21 12L16 7M21 12H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><strong id="kOut">0</strong><span>Checked out</span></div></div>
+        <div class="kpi"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M4 21C4 16.58 7.58 14 12 14C16.42 14 20 16.58 20 21" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div><div><strong id="kOpen">0</strong><span id="kOpenLbl">In the gym now</span></div></div>
         <div class="kpi warn"><div class="kpi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3L22 20H2L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 10V14M12 17H12.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div><div><strong id="kFlag">0</strong><span>Flagged entries</span></div></div>
       </div>
-      <section class="checkin">
+      <section class="checkin" id="checkinCard">
         <h3>Quick check-in</h3>
-        <p>Search by name, member ID, or contact number, then tap check in.</p>
-        <div class="ci-search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="ciInput" type="search" placeholder="Start typing a name or ID..." autocomplete="off" aria-label="Find member to check in"></div>
-        <div class="results" id="results" role="listbox"></div>
-        <div class="toast" id="toast"><span id="toastMsg"></span><button type="button" onclick="openDoor()">Open door</button></div>
+        <div class="ci-live">
+          <p>Search by name, member ID, or contact number, then tap check in.</p>
+          <div class="ci-search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="ciInput" type="search" placeholder="Start typing a name or ID..." autocomplete="off" aria-label="Find member to check in"></div>
+          <div class="results" id="results" role="listbox"></div>
+          <div class="toast" id="toast"><span id="toastMsg"></span><button type="button" onclick="openDoor()">Open door</button></div>
+        </div>
+        <div class="past-note"><span id="pastMsg"></span><button type="button" onclick="goToday()">Go to today</button></div>
       </section>
       <div class="grid">
         <div>
           <section class="panel panel-pad">
-            <div class="panel-head"><h3 id="logTitle">Today's attendance log</h3><div class="tabs" role="tablist"><button class="tab active" id="tabMembers" type="button" onclick="setTab('members')">Members</button><button class="tab" id="tabStaff" type="button" onclick="setTab('staff')">Staff</button></div></div>
-            <div class="table-wrap"><table><thead id="logHead"></thead><tbody id="logBody"></tbody></table></div>
+            <div class="panel-head"><div><h3 id="logTitle">Member log</h3><div class="hint" id="logHint"></div></div><div class="tabs" role="tablist"><button class="tab active" id="tabMembers" type="button" onclick="setTab('members')">Members</button><button class="tab" id="tabStaff" type="button" onclick="setTab('staff')">Staff</button></div></div>
+            <div class="filters" id="filters"></div>
+            <div class="table-wrap"><table><thead id="logHead"></thead><tbody id="logBody"></tbody></table><div class="empty" id="empty">No records match these filters.</div></div>
           </section>
         </div>
         <div>
-          <section class="panel panel-pad"><div class="panel-head"><h3>Currently in the gym</h3><span class="live"><i></i> Live</span></div><div id="inGym"></div></section>
-          <section class="panel panel-pad"><div class="panel-head"><h3>Traffic by hour</h3></div><div class="chart">
-            <div class="bar"><div class="fill" style="height:30%"></div></div><div class="bar"><div class="fill" style="height:62%"></div></div><div class="bar"><div class="fill" style="height:40%"></div></div><div class="bar"><div class="fill" style="height:25%"></div></div><div class="bar"><div class="fill" style="height:35%"></div></div><div class="bar"><div class="fill" style="height:55%"></div></div><div class="bar peak"><div class="fill" style="height:92%"></div></div><div class="bar"><div class="fill" style="height:70%"></div></div><div class="bar"><div class="fill" style="height:38%"></div></div>
-          </div><div class="chart-labels"><span>6a</span><span>8a</span><span>10a</span><span>12p</span><span>2p</span><span>4p</span><span>6p</span><span>8p</span><span>10p</span></div></section>
+          <section class="panel panel-pad"><div class="panel-head"><h3 id="sideTitle">Currently in the gym</h3><span class="live" id="liveBadge"><i></i> Live</span></div><div id="inGym"></div></section>
+          <section class="panel panel-pad"><div class="panel-head"><h3>Check-ins by time of day</h3></div><div class="chart" id="chart"></div><div class="chart-labels"><span>6a</span><span>8a</span><span>10a</span><span>12p</span><span>2p</span><span>4p</span><span>6p</span><span>8p</span><span>10p</span></div></section>
         </div>
       </div>
     </main>
@@ -183,6 +215,11 @@
   <script src="/components/theme.js"></script>
   <script>
     var TODAY = new Date();
+    function dateString(date){var month=('0'+(date.getMonth()+1)).slice(-2),day=('0'+date.getDate()).slice(-2);return date.getFullYear()+'-'+month+'-'+day;}
+    var TODAY_STR = dateString(TODAY);
+    var selDate = TODAY_STR;
+    var tab = 'members';
+    var filters = {q:'',status:'',type:'',student:'',role:''};
     var clients = [
       {id:'OKF-0001',name:'Jonas Villanueva',contact:'0917 123 4501',member:true,student:false,expiry:'2027-01-15'},
       {id:'OKF-0002',name:'Krizia Manalo',contact:'0918 222 3342',member:true,student:true,expiry:'2027-02-10'},
@@ -206,25 +243,71 @@
       {id:'OKF-0009',name:'Carlo Mendoza',inT:ago(60),outT:ago(15),flag:true},
       {id:'OKF-0002',name:'Krizia Manalo',inT:ago(25),outT:null,flag:false}
     ];
+    var staffPool = [
+      {name:'Aiza R.',role:'Front Desk'},
+      {name:'Coach Marco Reyes',role:'Coach'},
+      {name:'Coach Anna Cruz',role:'Coach'},
+      {name:'Coach Paolo Santos',role:'Coach'},
+      {name:'Coach Liza Torres',role:'Coach'}
+    ];
     var staffLog = [
       {name:'Aiza R.',role:'Front Desk',inT:ago(300),outT:null},
       {name:'Coach Marco Reyes',role:'Coach',inT:ago(255),outT:null},
       {name:'Coach Anna Cruz',role:'Coach',inT:ago(330),outT:ago(60)},
       {name:'Coach Paolo Santos',role:'Coach',inT:ago(140),outT:null}
     ];
-    var tab = 'members';
-    document.getElementById('todayLabel').textContent = TODAY.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-    function statusOf(client){if(!client.expiry)return 'none';var days=(new Date(client.expiry)-TODAY)/86400000;return days<0?'expired':days<=30?'expiring':'active';}
+    function statusOf(client){if(!client.expiry)return 'none';var todayDate=new Date(TODAY_STR+'T00:00:00'),expiryDate=new Date(client.expiry+'T00:00:00'),days=(expiryDate-todayDate)/86400000;return days<0?'expired':days<=30?'expiring':'active';}
     var label={active:'Active',expiring:'Expiring soon',expired:'Expired',none:'No membership'};
     function initials(name){return name.replace('Coach ','').split(' ').map(function(part){return part[0];}).slice(0,2).join('');}
     function timeOf(date){return date?date.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'—';}
     function duration(start,end){var minutes=Math.max(0,Math.round(((end||new Date())-start)/60000));return minutes>=60?Math.floor(minutes/60)+'h '+minutes%60+'m':minutes+'m';}
     function insideNow(id){return log.some(function(entry){return entry.id===id&&!entry.outT;});}
+    function hash(value){var result=0;for(var i=0;i<value.length;i++)result=(result*31+value.charCodeAt(i))>>>0;return result;}
+    function seededRandom(seed){var value=(seed>>>0)||1;return function(){value^=value<<13;value>>>=0;value^=value>>17;value^=value<<5;value>>>=0;return value/4294967296;};}
+    var historyCache={};
+    function genDay(date){
+      if(historyCache[date])return historyCache[date];
+      var random=seededRandom(hash(date)),base=new Date(date+'T00:00:00'),pool=clients.slice(),i,j,temp,members=[],staff=[];
+      for(i=pool.length-1;i>0;i--){j=Math.floor(random()*(i+1));temp=pool[i];pool[i]=pool[j];pool[j]=temp;}
+      var count=Math.min(pool.length,5+Math.floor(random()*7));
+      for(i=0;i<count;i++){
+        var client=pool[i],timeIn=new Date(base.getTime()+(360+Math.floor(random()*900))*60000),missed=random()<.1,state=statusOf(client);
+        members.push({id:client.id,name:client.name,inT:timeIn,outT:missed?null:new Date(timeIn.getTime()+(40+Math.floor(random()*90))*60000),flag:(state==='expired'||state==='none')&&random()<.6});
+      }
+      members.sort(function(a,b){return b.inT-a.inT;});
+      var staffCount=3+Math.floor(random()*3);
+      for(i=0;i<staffCount;i++){
+        var person=staffPool[i],staffIn=new Date(base.getTime()+(420+Math.floor(random()*150))*60000),noTimeOut=random()<.08;
+        staff.push({name:person.name,role:person.role,inT:staffIn,outT:noTimeOut?null:new Date(staffIn.getTime()+(420+Math.floor(random()*120))*60000)});
+      }
+      historyCache[date]={log:members,staff:staff};
+      return historyCache[date];
+    }
+    function isToday(){return selDate===TODAY_STR;}
+    function currentLog(){return isToday()?log:genDay(selDate).log;}
+    function currentStaff(){return isToday()?staffLog:genDay(selDate).staff;}
+    function clientOf(id){return clients.filter(function(client){return client.id===id;})[0]||{member:false,student:false};}
+    function dateLabel(value,long){return new Date(value+'T00:00:00').toLocaleDateString('en-US',long?{weekday:'long',month:'long',day:'numeric',year:'numeric'}:{weekday:'short',month:'short',day:'numeric'});}
+    function shiftDate(value,offset){var date=new Date(value+'T00:00:00');date.setDate(date.getDate()+offset);return dateString(date);}
+    function escapeHtml(value){return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
     var ci=document.getElementById('ciInput'),results=document.getElementById('results');
+    function resetFilters(){filters={q:'',status:'',type:'',student:'',role:''};}
+    function showToast(message){document.getElementById('toastMsg').textContent=message;document.getElementById('toast').classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(function(){document.getElementById('toast').classList.remove('show');},6000);}
+    function openDoor(){showToast('Door unlock sent (demo only — no hardware connected).');}
+    function checkIn(id,flag){
+      if(!isToday())return;
+      var client=clientOf(id),time=new Date();
+      log.unshift({id:id,name:client.name,inT:time,outT:null,flag:flag});
+      showToast(client.name+' checked in at '+timeOf(time)+(flag?' (flagged — no active membership)':''));
+      ci.value='';results.style.display='none';renderAll();
+    }
+    function checkOutId(id){if(!isToday())return;log.forEach(function(entry){if(entry.id===id&&!entry.outT)entry.outT=new Date();});ci.value='';results.style.display='none';renderAll();}
+    function checkOutIndex(index){if(isToday()&&log[index]){log[index].outT=new Date();renderAll();}}
+    function staffOut(index){if(isToday()&&staffLog[index]){staffLog[index].outT=new Date();renderAll();}}
     ci.addEventListener('input',function(){
       var query=ci.value.trim().toLowerCase();
       if(!query){results.style.display='none';return;}
-      var matches=clients.filter(function(client){return (client.name+' '+client.id+' '+client.contact).toLowerCase().includes(query);}).slice(0,5);
+      var matches=clients.filter(function(client){return (client.name+' '+client.id+' '+client.contact).toLowerCase().indexOf(query)>-1;}).slice(0,5);
       results.style.display='block';
       if(!matches.length){results.innerHTML='<div class="res-empty">No client found. Add them under Member Management.</div>';return;}
       results.innerHTML=matches.map(function(client){
@@ -235,38 +318,107 @@
         return '<div class="res-row"><div class="m-avatar">'+initials(client.name)+'</div><div class="grow"><strong>'+client.name+'</strong><small>'+client.id+' · '+(client.student?'Student':'Non-student')+' · '+(client.member?'Member':'Non-member')+'</small></div><span class="tag '+state+'">'+label[state]+'</span>'+button+'</div>';
       }).join('');
     });
-    function checkIn(id,flag){
-      var client=clients.find(function(item){return item.id===id;});
-      log.unshift({id:client.id,name:client.name,inT:new Date(),outT:null,flag:flag});
-      showToast(client.name+' checked in at '+timeOf(new Date())+(flag?' (flagged — no active membership)':''));
-      ci.value='';results.style.display='none';renderAll();
-    }
-    function checkOutId(id){log.forEach(function(entry){if(entry.id===id&&!entry.outT)entry.outT=new Date();});ci.value='';results.style.display='none';renderAll();}
-    function checkOutIndex(index){log[index].outT=new Date();renderAll();}
-    function staffOut(index){staffLog[index].outT=new Date();renderAll();}
-    function showToast(message){document.getElementById('toastMsg').textContent=message;document.getElementById('toast').classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(function(){document.getElementById('toast').classList.remove('show');},6000);}
-    function openDoor(){showToast('Door unlock sent (demo only — no hardware connected).');}
-    function setTab(nextTab){tab=nextTab;document.getElementById('tabMembers').classList.toggle('active',tab==='members');document.getElementById('tabStaff').classList.toggle('active',tab==='staff');renderLog();}
-    function renderLog(){
-      var head=document.getElementById('logHead'),body=document.getElementById('logBody');
+
+    var datePick=document.getElementById('datePick');
+    datePick.max=TODAY_STR;
+    function setDate(value){if(!value||value>TODAY_STR)return;selDate=value;resetFilters();ci.value='';results.style.display='none';renderAll();}
+    function goToday(){setDate(TODAY_STR);}
+    datePick.addEventListener('change',function(){setDate(datePick.value);});
+    document.getElementById('prevDay').addEventListener('click',function(){setDate(shiftDate(selDate,-1));});
+    document.getElementById('nextDay').addEventListener('click',function(){setDate(shiftDate(selDate,1));});
+    document.getElementById('todayBtn').addEventListener('click',goToday);
+
+    function setTab(nextTab){tab=nextTab;resetFilters();document.getElementById('tabMembers').classList.toggle('active',tab==='members');document.getElementById('tabStaff').classList.toggle('active',tab==='staff');renderFilters();renderLog();}
+    function setFilter(key,value){filters[key]=value;renderLog();}
+    function clearFilters(){resetFilters();renderFilters();renderLog();}
+    function selectFilter(key,title,options){return '<div class="f-group"><label>'+title+'</label><select onchange="setFilter(\''+key+'\',this.value)">'+options.map(function(option){return '<option value="'+option[0]+'"'+(filters[key]===option[0]?' selected':'')+'>'+option[1]+'</option>';}).join('')+'</select></div>';}
+    function renderFilters(){
+      var openLabel=isToday()?'Still in gym':'No check-out recorded';
+      var html='<div class="f-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" placeholder="Search name or ID..." value="'+escapeHtml(filters.q)+'" oninput="setFilter(\'q\',this.value)" aria-label="Filter attendance by name or ID"></div>';
       if(tab==='members'){
-        document.getElementById('logTitle').textContent="Today's member log";
-        head.innerHTML='<tr><th>Member</th><th>Time in</th><th>Time out</th><th>Duration</th><th>Status</th><th></th></tr>';
-        body.innerHTML=log.map(function(entry,index){var state=entry.outT?'<span class="tag done">Completed</span>':'<span class="tag in">In gym</span>';if(entry.flag)state+=' <span class="tag flag">Flagged</span>';return '<tr><td><div class="cell"><div class="m-avatar">'+initials(entry.name)+'</div><div><strong>'+entry.name+'</strong><small>'+entry.id+'</small></div></div></td><td>'+timeOf(entry.inT)+'</td><td class="muted">'+timeOf(entry.outT)+'</td><td class="muted">'+duration(entry.inT,entry.outT)+'</td><td>'+state+'</td><td>'+(entry.outT?'':'<button class="link-btn" onclick="checkOutIndex('+index+')">Check out</button>')+'</td></tr>';}).join('');
+        html+=selectFilter('status','Status',[['','All'],['out','Checked out'],['open',openLabel],['flag','Flagged']]);
+        html+=selectFilter('type','Client type',[['','All'],['member','Member'],['non','Non-member']]);
+        html+=selectFilter('student','Student',[['','All'],['yes','Student'],['no','Non-student']]);
       }else{
-        document.getElementById('logTitle').textContent="Today's staff log";
-        head.innerHTML='<tr><th>Staff</th><th>Role</th><th>Time in</th><th>Time out</th><th>Hours</th><th></th></tr>';
-        body.innerHTML=staffLog.map(function(staff,index){return '<tr><td><div class="cell"><div class="m-avatar">'+initials(staff.name)+'</div><div><strong>'+staff.name+'</strong><small>'+(staff.outT?'Off duty':'On duty')+'</small></div></div></td><td class="muted">'+staff.role+'</td><td>'+timeOf(staff.inT)+'</td><td class="muted">'+timeOf(staff.outT)+'</td><td class="muted">'+duration(staff.inT,staff.outT)+'</td><td>'+(staff.outT?'':'<button class="link-btn" onclick="staffOut('+index+')">Time out</button>')+'</td></tr>';}).join('');
+        html+=selectFilter('status','Status',[['','All'],['out','Timed out'],['open',isToday()?'On duty':'No time-out recorded']]);
+        html+=selectFilter('role','Role',[['','All'],['Front Desk','Front Desk'],['Coach','Coach']]);
       }
+      html+='<div class="f-meta"><span id="fCount"></span><button class="clear" type="button" onclick="clearFilters()">Clear</button></div>';
+      document.getElementById('filters').innerHTML=html;
     }
-    function renderInGym(){var inside=log.map(function(entry,index){return {entry:entry,index:index};}).filter(function(item){return !item.entry.outT;});document.getElementById('inGym').innerHTML=inside.length?inside.map(function(item){return '<div class="ig-item"><div class="m-avatar">'+initials(item.entry.name)+'</div><div class="grow"><h5>'+item.entry.name+'</h5><p>In since '+timeOf(item.entry.inT)+' · '+duration(item.entry.inT)+'</p></div><button class="link-btn" onclick="checkOutIndex('+item.index+')">Out</button></div>';}).join(''):'<div class="ig-empty">Nobody is checked in right now.</div>';}
-    function renderKpis(){document.getElementById('kIn').textContent=log.filter(function(entry){return !entry.outT;}).length;document.getElementById('kTotal').textContent=log.length;document.getElementById('kFlag').textContent=log.filter(function(entry){return entry.flag;}).length;}
-    function renderAll(){renderKpis();renderLog();renderInGym();}
-    document.getElementById('exportButton').addEventListener('click',function(){
-      var rows=[['Member','Member ID','Time in','Time out','Duration','Status']].concat(log.map(function(entry){return [entry.name,entry.id,timeOf(entry.inT),timeOf(entry.outT),duration(entry.inT,entry.outT),entry.outT?'Completed':entry.flag?'Flagged':'In gym'];}));
+    function filteredMembers(){
+      var query=filters.q.trim().toLowerCase();
+      return currentLog().map(function(entry,index){return {entry:entry,index:index};}).filter(function(item){
+        var entry=item.entry,client=clientOf(entry.id);
+        if(query&&(entry.name+' '+entry.id).toLowerCase().indexOf(query)===-1)return false;
+        if(filters.status==='out'&&!entry.outT)return false;
+        if(filters.status==='open'&&entry.outT)return false;
+        if(filters.status==='flag'&&!entry.flag)return false;
+        if(filters.type==='member'&&!client.member)return false;
+        if(filters.type==='non'&&client.member)return false;
+        if(filters.student==='yes'&&!client.student)return false;
+        if(filters.student==='no'&&client.student)return false;
+        return true;
+      });
+    }
+    function filteredStaff(){
+      var query=filters.q.trim().toLowerCase();
+      return currentStaff().map(function(person,index){return {person:person,index:index};}).filter(function(item){
+        var person=item.person;
+        if(query&&person.name.toLowerCase().indexOf(query)===-1)return false;
+        if(filters.status==='out'&&!person.outT)return false;
+        if(filters.status==='open'&&person.outT)return false;
+        if(filters.role&&person.role!==filters.role)return false;
+        return true;
+      });
+    }
+    function renderLog(){
+      var head=document.getElementById('logHead'),body=document.getElementById('logBody'),today=isToday(),rows,total;
+      if(tab==='members'){
+        document.getElementById('logTitle').textContent='Member log';
+        head.innerHTML='<tr><th>Member</th><th>Type</th><th>Time in</th><th>Time out</th><th>Duration</th><th>Status</th><th></th></tr>';
+        rows=filteredMembers();total=currentLog().length;
+        body.innerHTML=rows.map(function(item){
+          var entry=item.entry,client=clientOf(entry.id),state=entry.outT?'<span class="tag done">Checked out</span>':today?'<span class="tag in">In gym</span>':'<span class="tag flag">No check-out</span>';
+          if(entry.flag)state+=' <span class="tag flag">Flagged</span>';
+          return '<tr><td><div class="cell"><div class="m-avatar">'+initials(entry.name)+'</div><div><strong>'+entry.name+'</strong><small>'+entry.id+'</small></div></div></td><td><span class="tag plain">'+(client.member?'Member':'Non-member')+'</span>'+(client.student?' <span class="tag type">Student</span>':'')+'</td><td>'+timeOf(entry.inT)+'</td><td class="muted">'+timeOf(entry.outT)+'</td><td class="muted">'+(entry.outT||today?duration(entry.inT,entry.outT):'—')+'</td><td>'+state+'</td><td>'+(today&&!entry.outT?'<button class="link-btn" onclick="checkOutIndex('+item.index+')">Check out</button>':'')+'</td></tr>';
+        }).join('');
+      }else{
+        document.getElementById('logTitle').textContent='Staff log';
+        head.innerHTML='<tr><th>Staff</th><th>Role</th><th>Time in</th><th>Time out</th><th>Hours</th><th></th></tr>';
+        rows=filteredStaff();total=currentStaff().length;
+        body.innerHTML=rows.map(function(item){
+          var person=item.person;
+          return '<tr><td><div class="cell"><div class="m-avatar">'+initials(person.name)+'</div><div><strong>'+person.name+'</strong><small>'+(person.outT?'Timed out':today?'On duty':'No time-out recorded')+'</small></div></div></td><td class="muted">'+person.role+'</td><td>'+timeOf(person.inT)+'</td><td class="muted">'+timeOf(person.outT)+'</td><td class="muted">'+(person.outT||today?duration(person.inT,person.outT):'—')+'</td><td>'+(today&&!person.outT?'<button class="link-btn" onclick="staffOut('+item.index+')">Time out</button>':'')+'</td></tr>';
+        }).join('');
+      }
+      document.getElementById('empty').style.display=rows.length?'none':'block';
+      document.getElementById('fCount').textContent='Showing '+rows.length+' of '+total;
+      document.getElementById('logHint').textContent=dateLabel(selDate,true)+(today?' · Today':' · Past record (read-only)');
+    }
+    function renderInGym(){
+      var today=isToday(),open=currentLog().map(function(entry,index){return {entry:entry,index:index};}).filter(function(item){return !item.entry.outT;});
+      document.getElementById('sideTitle').textContent=today?'Currently in the gym':'No check-out recorded';
+      document.getElementById('liveBadge').style.display=today?'inline-flex':'none';
+      document.getElementById('inGym').innerHTML=open.length?open.map(function(item){return '<div class="ig-item"><div class="m-avatar">'+initials(item.entry.name)+'</div><div class="grow"><h5>'+item.entry.name+'</h5><p>'+(today?'In since '+timeOf(item.entry.inT)+' · '+duration(item.entry.inT):'Checked in '+timeOf(item.entry.inT)+' · no time out')+'</p></div>'+(today?'<button class="link-btn" onclick="checkOutIndex('+item.index+')">Out</button>':'')+'</div>';}).join(''):'<div class="ig-empty">'+(today?'Nobody is checked in right now.':'Every check-in has a check-out recorded.')+'</div>';
+    }
+    function renderKpis(){var entries=currentLog(),today=isToday();document.getElementById('kTotal').textContent=entries.length;document.getElementById('kOut').textContent=entries.filter(function(entry){return entry.outT;}).length;document.getElementById('kOpen').textContent=entries.filter(function(entry){return !entry.outT;}).length;document.getElementById('kOpenLbl').textContent=today?'In the gym now':'No check-out recorded';document.getElementById('kFlag').textContent=entries.filter(function(entry){return entry.flag;}).length;}
+    function renderChart(){var bins=[0,0,0,0,0,0,0,0,0];currentLog().forEach(function(entry){var hour=entry.inT.getHours(),bin=Math.min(8,Math.max(0,Math.floor((hour-6)/2)));bins[bin]++;});var max=Math.max.apply(null,bins)||1;document.getElementById('chart').innerHTML=bins.map(function(value){var percent=value?Math.max(8,Math.round(value/max*100)):0;return '<div class="bar'+(value===max&&value>0?' peak':'')+'" title="'+value+' check-in(s)"><div class="fill" style="height:'+percent+'%"></div></div>';}).join('');}
+    function renderHeader(){var today=isToday();datePick.value=selDate;document.getElementById('nextDay').disabled=today;document.getElementById('todayBtn').disabled=today;document.getElementById('checkinCard').classList.toggle('past',!today);document.getElementById('pastMsg').textContent='You are viewing '+dateLabel(selDate)+'. Check-in and check-out only work for today.';document.getElementById('pageSub').textContent=today?"Check members in and out, and track who's on the floor":'Viewing the attendance record for '+dateLabel(selDate,true);}
+    function renderAll(){renderHeader();renderKpis();renderFilters();renderLog();renderInGym();renderChart();}
+    function exportCsv(){
+      var rows=[];
+      if(tab==='members'){
+        rows.push(['Member ID','Name','Type','Student','Time in','Time out','Duration','Flagged']);
+        filteredMembers().forEach(function(item){var entry=item.entry,client=clientOf(entry.id);rows.push([entry.id,entry.name,client.member?'Member':'Non-member',client.student?'Yes':'No',timeOf(entry.inT),timeOf(entry.outT),entry.outT?duration(entry.inT,entry.outT):'',entry.flag?'Yes':'No']);});
+      }else{
+        rows.push(['Name','Role','Time in','Time out','Hours']);
+        filteredStaff().forEach(function(item){var person=item.person;rows.push([person.name,person.role,timeOf(person.inT),timeOf(person.outT),person.outT?duration(person.inT,person.outT):'']);});
+      }
       var csv=rows.map(function(row){return row.map(function(value){return '"'+String(value).replace(/"/g,'""')+'"';}).join(',');}).join('\r\n');
-      var link=document.createElement('a');link.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));link.download='attendance.csv';link.click();URL.revokeObjectURL(link.href);
-    });
+      var link=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));link.href=url;link.download='attendance-'+tab+'-'+selDate+'.csv';document.body.appendChild(link);link.click();link.remove();
+    }
+    document.getElementById('exportButton').addEventListener('click',exportCsv);
     renderAll();
   </script>
 </body>

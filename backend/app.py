@@ -84,6 +84,13 @@ def create_app(config_class: type = Config) -> Flask:
             return access_denied
         return send_from_directory(FRONTEND_DIR, "attendance.html")
 
+    @app.route("/bookings")
+    def bookings_page():
+        access_denied = require_admin()
+        if access_denied:
+            return access_denied
+        return send_from_directory(FRONTEND_DIR, "bookings.html")
+
     @app.route("/member-management")
     def member_management_page():
         access_denied = require_admin()
